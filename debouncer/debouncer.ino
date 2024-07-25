@@ -1,7 +1,8 @@
-const int pinHiLo = 9;
-const int pinSwitch = 9;
+const int pinHiLo = 8;
+const int pinLoHi = 9;
+const int pinSwitch = 4;
 bool flagPushed = false;
-int buttonState = LOW;
+int buttonState = HIGH;
 // the setup function runs once when you press reset or power the board
 void setup() {
   Serial.begin(9600);
@@ -16,15 +17,22 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
+  flagPushed = false;
   digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
   digitalWrite(pinHiLo, HIGH);
+  digitalWrite(pinLoHi, LOW);
   buttonState = digitalRead(pinSwitch);
-  //if (flagPushed == false) {
-    if (buttonState == HIGH) {
+  Serial.println(digitalRead(pinSwitch));
+  if (flagPushed == false) {
+    if (buttonState == LOW) {
+      flagPushed = true;
       digitalWrite(pinHiLo, LOW);
+      digitalWrite(pinLoHi, HIGH);
+      delay(10);
+      digitalWrite(pinHiLo, HIGH);
+      digitalWrite(pinLoHi, LOW);
+      delay(1000);
     }
-  //}
-  delay(1000);                      // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
-  delay(1000);                      // wait for a second
+  }
+
 }
